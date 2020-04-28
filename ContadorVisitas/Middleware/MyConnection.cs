@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Threading;
-using System.Web;
 using Microsoft.AspNet.SignalR;
 
 namespace ContadorVisitas.Middleware
@@ -18,14 +14,39 @@ namespace ContadorVisitas.Middleware
         /// <param name="request"></param>
         /// <param name="connectionId">Identificador de la conexión</param>
         /// <returns></returns>
-        protected override Task OnConnected(IRequest request, string connectionId)
+        protected override async Task OnConnected(IRequest request, string connectionId)
         {
-            return Connection.Send(connectionId, "Welcome!");
+            Interlocked.Increment(ref _connection);
+            await Connection.Send(connectionId, "Welcome! " + connectionId);
+            await Connection.Broadcast("New connection: " + connectionId + ". Current visits: " + _connection);
+
         }
 
+
+        /// <summary>
+        /// Este método se dispara cuando se reciben datos desde le cliente
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="connectionId"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
         protected override Task OnReceived(IRequest request, string connectionId, string data)
         {
-            return Connection.Broadcast(data);
+            var message = connectionId + ": " + data;
+            return Connection.Broadcast(message);
+        }
+
+        /// <summary>
+        /// Este método se dispara cuando un cliente se desconecta
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="connectionId"></param>
+        /// <param name="stopCalled"></param>
+        /// <returns></returns>
+        protected override Task OnDisconnected(IRequest request, string connectionId, bool stopCalled)
+        {
+            Interlocked.Decrement(ref _connection);
+            return Connection.Broadcast(connectionId + " salió. Current visits: " + _connection);
         }
     }
 }

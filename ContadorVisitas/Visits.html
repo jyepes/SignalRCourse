@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Contador de visitas</title>
+    <script src="Scripts/jquery.signalR-2.4.1.min.js"></script>
+    <script src="Scripts/jquery-3.0.0.min.js"></script>
+    <link href="Content/bootstrap.css" rel="stylesheet" />
+
+    <script>
+        $(function () {
+            var connection = $.connection("/realtime");
+            //debugger;
+            connection.logging = true;
+
+            connection.received(function (data) {
+                var newRow = "<tr>";
+                newRow += "<td>" + data + "</td>";
+                newRow += "</tr>";
+                $("#tableSimple").append(newRow);
+            });
+
+            connection.error(function (err) {
+                alert("Parece que hay un problema. \n" +
+                    "Error: " + err.message);
+            });
+
+            connection.start().done(function () {
+                $("#send").click(function () {
+                    connection.send($("#text").val());
+                    $("#text").val("").focus();
+                });
+            });
+        }
+        )
+    </script>
+</head>
+<body>
+    <h1>Contador de Visitas</h1>
+    <div class="alert alert-success">
+        <input type="text" id="text" class="input-lg" />
+        <button id="send" class="btn btn-info">Send</button>
+        <table id="tableSimple" class="table">
+            <tr>
+                <th>Conexiones en Tiempo Real</th>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
