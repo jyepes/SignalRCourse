@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Chat</title>
+    <script src="Scripts/jquery-3.0.0.min.js"></script>
+    <script src="Scripts/jquery.signalR-2.4.1.min.js"></script>
+    <link href="Content/bootstrap.css" rel="stylesheet" />
+    <script>
+        $(function () {
+            var connection = $.connection('/chatSignalR');
+            connection.received(function (data) {
+                $('#messages').append('<li class="list-group-item">' + data + '</li>');
+            });
+            connection.connectionSlow(function () {
+                $('#connectionStatus').html('La conexión se relentizó');
+            });
+            connection.disconnected(function () {
+                disableChat();
+            });
+            connection.error(function (errorData) {
+                console.log(errorData);
+            });
+            connection.reconnected(function () {
+                enableChat();
+            });
+            connection.reconnecting(function () {
+                disableChat();
+            });
+            connection.stateChanged(function (states) {
+                var newState = states.newState;
+                var connectionStatus = '';
+                switch (newState) {
+                    case $.connection.connectionState.connected:
+                        connectionStatus = 'Conectado';
+                        enableChat();
+                        break;
+                    case $.connection.connectionState.connecting:
+                        connectionStatus = 'Conectando...';
+                        break;
+                    case $.connection.connectionState.reconnecting:
+                        connectionStatus = 'Reconectando...';
+                        break;
+                    case $.connection.connectionState.disconnected:
+                        connectionStatus = 'Desconectado';
+                        break;
+                }
+                $('#connectionStatus').html(connectionStatus);
+            });
+            connection.starting(function () {
+                console.log('Solicitud de negociación exitosa');
+            });
+            $("#btnSend").click(function () {
+                connection.send($('#grupo').val() + ':' + $('#name').val() + ':' + $('#message').val());
+            });
+            $("#btnConnect").click(function () {
+                connection.qs = 'groupChat=' + $('#grupo').val();
+                connection.start();
+            });
+            $("#btnDisconnect").click(function () {
+                connection.stop();
+            });
+            function enableChat() {
+                $("#btnSend").removeAttr("disabled");
+                $("#btnDisconnect").removeAttr("disabled");
+                $("#btnConnect").attr("disabled", "disabled");
+            }
+            function disableChat() {
+                $("#btnSend").attr("disabled", "disabled");
+                $("#btnDisconnect").attr("disabled", "disabled");
+                $("#btnConnect").removeAttr("disabled");
+            }
+        });
+    </script>
+
+</head>
+<body>
+    <div class="jumbotron text-center">
+        <h1>ASP.NET SignalR</h1>
+        <p>Chat usando Conexiones Persistentes</p>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="grupo">Ingrese Nombre de Grupo:</label>
+                    <input id="grupo" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="usuario">Usuario:</label>
+                    <input id="name" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="message">Mensaje:</label>
+                    <input id="message" class="form-control">
+                </div>
+
+                <button id="btnSend" class="btn btn-primary" disabled="disabled">Enviar Mensaje</button>
+            </div>
+            <div class="col-sm-6">
+                <button id="btnConnect" class="btn btn-success">Conectar</button>
+                <button id="btnDisconnect" class="btn btn-danger" disabled="disabled">Desconectar</button>
+                <label id="connectionStatus">Disconnected</label>
+                <ul class="list-group border" id="messages" style="height:550px; overflow-y: scroll;">
+                    <li class="list-group-item">Histórico de Mensajes</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
