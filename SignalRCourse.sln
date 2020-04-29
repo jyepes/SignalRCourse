@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chat", "Chat\Chat.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GroupsChat", "GroupsChat\GroupsChat.csproj", "{1C38BCAD-87B2-44BB-9902-0524B44C1BF5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PersistentConnection", "PersistentConnection", "{E82A0526-3523-4DCC-A7BC-94AAC528991F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Hub", "Hub", "{C2076F7A-8B3B-4979-8300-E0EE92FC3464}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +40,12 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{554B8574-BE9A-46FE-B460-5F000413FF5F} = {E82A0526-3523-4DCC-A7BC-94AAC528991F}
+		{93E6DD00-86DC-41B5-AD41-D6C7E4B50668} = {E82A0526-3523-4DCC-A7BC-94AAC528991F}
+		{B0DA3A9F-212E-44FB-8015-5184ED242E29} = {E82A0526-3523-4DCC-A7BC-94AAC528991F}
+		{1C38BCAD-87B2-44BB-9902-0524B44C1BF5} = {E82A0526-3523-4DCC-A7BC-94AAC528991F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {83126F9D-4DC4-4A3D-B618-AC1324F5A618}
