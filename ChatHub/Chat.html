@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Chat</title>
+    <script src="Scripts/jquery-3.0.0.min.js"></script>
+    <script src="Scripts/jquery.signalR-2.4.1.min.js"></script>
+    <script src="chatSignalR/hubs"></script>
+
+    <link href="Content/bootstrap.css" rel="stylesheet" />
+
+    <script type="text/javascript">
+        $(function () {
+            var broadcaster = $.connection.chatHub;
+            broadcaster.client.displayText = function (group, name, message) {
+                $('#messages').append('<li class="list-group-item">' + name + ' dice: ' + message + '</li>');
+            };
+            $.connection.hub.start().done(function () {
+                $('#send').click(function () {
+                    broadcaster.server.join($('#groupName').val());
+                    broadcaster.server.broadcastMessage({
+                        Group: $('#groupName').val(),
+                        Name: $('#name').val(),
+                        Message: $('#message').val()
+                    });
+                });
+                $('#leave').click(function () {
+                    broadcaster.server.leave($('#groupName').val());
+                });
+            });
+        });
+    </script>
+
+</head>
+<body>
+    <div class="jumbotron text-center">
+        <h1>ASP.NET SignalR</h1>
+        <p>Chat usando Hubs</p>
+    </div>
+    <div class="container">
+        <div class="form-inline">
+            <input type="text" id="groupName" placeholder="Grupo" class="form-control mb-2 mr-sm-2 mb-sm-0" />
+            <input type="text" id="name" placeholder="Nombre" class="form-control mb-2 mr-sm-2 mb-sm-0" />
+            <input type="text" id="message" placeholder="Mensaje" class="form-control mb-2 mr-sm-2 mb-sm-0" />
+            <input type="button" id="send" value="Enviar" class="btn btn-success" />
+            <input type="button" id="leave" value="Abandonar" class="btn btn-danger" />
+        </div>
+        <ul id="messages" class="list-group border"></ul>
+    </div>
+
+</body>
+</html>
