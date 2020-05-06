@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Cliente</title>
+    <script src="Scripts/jquery-3.4.1.min.js"></script>
+    <script src="Scripts/jquery.signalR-2.2.2.min.js"></script>
+    <script src="signalr/hubs"></script>
+
+    <link href="Content/bootstrap.css" rel="stylesheet" />
+
+    <script type="text/javascript">
+        $(function () {
+            var broadcaster = $.connection.broadcastHub;
+            $.connection.hub.logging = true;
+
+            broadcaster.client.displayText = function (text) {
+                $('#messages').append('<li class="list-group-item">' + text + '</li>');
+            };
+
+            $.connection.hub.start().done(function () {
+                $("#btnConnect").click(function () {
+                    $('#messages').empty();
+                    broadcaster.server.openBroadcast();
+                });
+            });
+        });
+    </script>
+
+</head>
+<body>
+    <div class="jumbotron text-center">
+        <h1>ASP.NET SignalR</h1>
+        <p>Broadcast usando Hubs</p>
+    </div>
+    <div class="container">
+        <input type="button" id="btnConnect" value="Conectar" class="btn btn-success" />
+        <ul id="messages" class="list-group border"></ul>
+    </div>
+</body>
+</html>
