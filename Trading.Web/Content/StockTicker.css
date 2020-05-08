@@ -1,0 +1,42 @@
+﻿#stockTable {
+    border-collapse: collapse;
+}
+
+#stockTable th, #stockTable td {
+    text-align: right;
+}
+
+#stockTable .loading td {
+    text-align: left;
+}
+
+#stockTicker {
+    overflow: hidden;
+    width: 1100px;
+    height: 26px;
+    border: 1px solid #999;
+}
+
+#stockTicker .inner {
+    width: 100%;
+}
+
+#stockTicker ul {
+    display: inline-block;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+#stockTicker li {
+    display: inline-block;
+    margin-right: 8px;
+}
+
+#stockTicker .symbol {
+    font-weight: bold;
+}
+
+#stockTicker .change {
+    font-style: italic;
+}
