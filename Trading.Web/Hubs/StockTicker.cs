@@ -6,7 +6,7 @@ using System.Threading;
 using Trading.Business;
 using Trading.Entities;
 
-namespace Trading.Web.Hub
+namespace Trading.Web.Hubs
 {
     public class StockTicker
     {

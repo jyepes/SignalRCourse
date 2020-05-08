@@ -2,7 +2,7 @@
 using Microsoft.AspNet.SignalR;
 using Trading.Entities;
 
-namespace Trading.Web.Hub
+namespace Trading.Web.Hubs
 {
     public class StockTickerHub : Microsoft.AspNet.SignalR.Hub
     {
